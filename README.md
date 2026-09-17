@@ -1,8 +1,8 @@
 # EXPERIMENT--03-SIMULATION-OF-PUSHBUTTON-AND-LED INTERFACE WITH ARM CONTROLLER AND PROTEUS 
 ## Aim: To Interface a Digital output (LED) and Digital input (Pushbutton) to ARM development board , and simulate it in Proteus 
-## Name :
-## Roll no :
-## Date of Experiment :
+## Name : NARRA AKHIL
+## Roll no : 212223230136
+## Date of Experiment : 08/08/2026
 ## Components required: STM32 CUBE IDE, Proteus 8 simulator .
 ## Theory 
 The full form of an ARM is an advanced reduced instruction set computer (RISC) machine, and it is a 32-bit processor architecture expanded by ARM holdings. The applications of an ARM processor include several microcontrollers as well as processors. The architecture of an ARM processor was licensed by many corporations for designing ARM processor-based SoC products and CPUs. This allows the corporations to manufacture their products using ARM architecture. Likewise, all main semiconductor companies will make ARM-based SOCs such as Samsung, Atmel, TI etc.
@@ -74,6 +74,57 @@ We are now at the last part of step by step guide on how to simulate STM32 proje
 
 
 ## STM 32 CUBE PROGRAM :
+```
+#include "main.h" #include <stdbool.h> void push_button(); bool button_status;
+
+void SystemClock_Config(void); static void MX_GPIO_Init(void);
+
+int main(void) {
+
+HAL_Init();
+
+SystemClock_Config();
+
+MX_GPIO_Init();
+
+while (1) { push_button(); }
+
+} void push_button() { button_status=HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_5); if (button_status==0) { HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_SET); } else { HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_RESET); } }
+
+void SystemClock_Config(void) { RCC_OscInitTypeDef RCC_OscInitStruct = {0}; RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+__HAL_RCC_PWR_CLK_ENABLE(); __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
+
+RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI; RCC_OscInitStruct.HSIState = RCC_HSI_ON; RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT; RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE; if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) { Error_Handler(); }
+
+RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2; RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI; RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1; RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1; RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK) { Error_Handler(); } }
+
+static void MX_GPIO_Init(void) { GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+__HAL_RCC_GPIOA_CLK_ENABLE();
+
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET);
+
+GPIO_InitStruct.Pin = GPIO_PIN_5; GPIO_InitStruct.Mode = GPIO_MODE_INPUT; GPIO_InitStruct.Pull = GPIO_PULLUP; HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+GPIO_InitStruct.Pin = GPIO_PIN_11; GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP; GPIO_InitStruct.Pull = GPIO_NOPULL; GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW; HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+}
+
+void Error_Handler(void) {
+
+__disable_irq(); while (1) { }
+
+}
+
+#ifdef USE_FULL_ASSERT
+
+void assert_failed(uint8_t *file, uint32_t line) {
+
+} #endif
+```
 
 
 
@@ -81,12 +132,16 @@ We are now at the last part of step by step guide on how to simulate STM32 proje
 ## Output screen shots of proteus  :
 
 
+<img width="1280" height="768" alt="489349040-f5046a5c-d1a8-4b09-be52-0355aa6b5e58" src="https://github.com/user-attachments/assets/c7d3ae52-3c26-4c44-ba76-dd57a76f8ec3" />
+<img width="1280" height="765" alt="489349203-9ba4baa1-96b6-4012-9460-e14f63010d78" src="https://github.com/user-attachments/assets/4f42c1d1-e357-4003-90b7-b597f792bbe0" />
+
 
 
 ## Proteus layout(Add pdf screen shot of circuit here)
  
  
- 
+ <img width="723" height="720" alt="489349339-c89cd66d-104e-403e-9945-e2e492c7c43b" src="https://github.com/user-attachments/assets/0ae8ad72-888a-476f-be73-76ddd4177905" />
+
  
 ## Result :
 Interfacing a digital output and digital input  with ARM microcontroller are simulated in proteus and the results are verified.
